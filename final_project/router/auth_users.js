@@ -6,16 +6,38 @@ const regd_users = express.Router();
 let users = [];
 
 const isValid = (username)=>{ //returns boolean
-//write code to check is the username is valid
+    let matching_users = users.filter((user) => 
+    {
+        return user.username == username;
+    })
+
+    return matching_users.length == 0;
 }
 
 const authenticatedUser = (username,password)=>{ //returns boolean
-//write code to check if username and password match the one we have in records.
+    let matching_users = users.filter((user) => 
+    {
+        return user.username == username && user.password == password;
+    })
+
+    return matching_users.length != 0;
 }
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
-  //Write your code here
+  let username = req.body.username;
+  let password = req.body.password;
+
+  if(!username || !password)
+  {
+    return res.send("Missing credentials")
+  }
+  if(authenticatedUser(username, password))
+  {
+    let token = jwt.sign(
+        {user: username, pass: password}, "totallySecureSecretKey", {expiresIn: '1h'}
+    )
+  }
   return res.status(300).json({message: "Yet to be implemented"});
 });
 
