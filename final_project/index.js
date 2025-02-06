@@ -17,10 +17,17 @@ app.use("/customer/auth/*", function auth(req,res,next){
     {
         let token = req.session.token;
 
-        if(jwt.verify(token, 'secret', ))
+        try
         {
-            
-        }
+            jwt.verify(token, 'totallySecureSecretKey');
+            next();
+        } 
+        catch(err)
+        {
+            return res.send("Invalid token");
+        }  
+        
+    
     }
 });
  

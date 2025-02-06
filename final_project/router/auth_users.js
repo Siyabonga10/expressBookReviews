@@ -25,6 +25,7 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
+  console.log(req.session);
   let username = req.body.username;
   let password = req.body.password;
 
@@ -37,8 +38,10 @@ regd_users.post("/login", (req,res) => {
     let token = jwt.sign(
         {user: username, pass: password}, "totallySecureSecretKey", {expiresIn: '1h'}
     )
+    req.session.token = token;
+    return res.send("You have been logged in.")
   }
-  return res.status(300).json({message: "Yet to be implemented"});
+  return res.status(200).json({message: "Invalid credentials."});
 });
 
 // Add a book review
