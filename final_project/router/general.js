@@ -32,13 +32,19 @@ function getAllBooks()
 }
 
 public_users.get('/', async function (req, res) {
-  let books = await getAllBooks();
-  res.send(JSON.stringify(books, null, 4));
+  let books_ = await getAllBooks();
+  res.send(JSON.stringify(books_, null, 4));
 });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-  res.send(JSON.stringify(books[req.params.isbn], null, 4));
+function getBookByISBN(isbn)
+{
+  setTimeout(() => {console.log("1s delay complete")}, 1000); // Simulate a delay
+  return books[isbn]
+}
+public_users.get('/isbn/:isbn',async function (req, res) {
+  let book = await getBookByISBN(req.params.isbn);
+  res.send(JSON.stringify(book, null, 4));
  });
   
 // Get book details based on author
