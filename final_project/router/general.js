@@ -25,7 +25,14 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
+function getAllBooks()
+{
+  setTimeout(() => {console.log("1s delay complete")}, 1000); // Simulated a delay
+  return books;
+}
+
+public_users.get('/', async function (req, res) {
+  let books = await getAllBooks();
   res.send(JSON.stringify(books, null, 4));
 });
 
