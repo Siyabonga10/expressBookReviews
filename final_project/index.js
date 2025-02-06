@@ -13,14 +13,15 @@ app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUni
 app.use("/customer/auth/*", function auth(req,res,next){
 //Write the authenication mechanism here
 // Needs to check if the user logging in is already authenticated 
-    if(req.session.user)
+    if(req.session.token)
     {
         let token = req.session.token;
-
         try
         {
-            jwt.verify(token, 'totallySecureSecretKey');
+            let payload = jwt.verify(token, 'totallySecureSecretKey');
+            req.session.user = payload.user;
             next();
+            return;
         } 
         catch(err)
         {
@@ -29,6 +30,7 @@ app.use("/customer/auth/*", function auth(req,res,next){
         
     
     }
+    res.send("User not logged in")
 });
  
 const PORT =5000;

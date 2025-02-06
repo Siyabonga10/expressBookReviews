@@ -25,7 +25,6 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
-  console.log(req.session);
   let username = req.body.username;
   let password = req.body.password;
 
@@ -46,8 +45,21 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  //Find the right book object
+  let book = books[req.params.isbn]
+  if(!book)
+  {
+    return res.status(404).send("Book not found");
+  }
+  let review = req.body.review
+  if(!review)
+  {
+    return res.send("No review provided");
+  }
+
+  book.reviews[req.session.user] = review;
+
+  return res.json({message: "Review published succesfully"});
 });
 
 module.exports.authenticated = regd_users;
